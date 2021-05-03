@@ -15,7 +15,7 @@ jobs:
       run: git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 ~/tc/gcc64 && git clone https://github.com/mvaisakh/gcc-arm --depth=1 ~/tc/gcc32
     - name: ohk
       run: |
-        echo ::set-output name=date::$(/bin/date -u "+%Y%m%d")
+        echo ::set-output name=date::$(/bin/date -u "+%Y%m%d") && ls
     - name: When is this building
       run: |
         echo 'Building on ${{ steps.get-date.outputs.date }}'
@@ -23,7 +23,6 @@ jobs:
       run: make O=out ARCH=arm64 ysl-perf_defconfig
     - name: make
       run: make O=out ARCH=arm64 CROSS_COMPILE=~/tc/gcc64/bin/aarch64-elf- CROSS_COMPILE_ARM32=~/tc/gcc32/bin/arm-eabi- -j$(nproc --all)
-           lsblk 
     - name: Kernel Image
       run: cp out/arch/arm64/boot/Image.gz-dtb eva-kernel-${{ steps.get-date.outputs.date }}.gz
     - name: Create Release
